@@ -2,6 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Author;
+use App\Models\Translator;
+
+
 use App\Models\Book;
 use Illuminate\Http\Request;
 
@@ -24,7 +28,11 @@ class BookController extends Controller
      */
     public function create()
     {
-        return view('book.create');
+        $authors = Author::all();
+        return view('book.create', ['authors' => $authors]);
+
+        $translators = Translator::all();
+        return view('book.create', ['translators' => $translators]);
     }
 
     /**
@@ -35,7 +43,16 @@ class BookController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $book = new Book;
+        $book->title = $request->book_title;
+        $book->isbn = $request->book_isbn;
+        $book->pages = $request->book_pages;
+        $book->about = $request->book_about;
+        $book->author_id = $request->author_id;
+        $book->translator_id = $request->translator_id;
+        $book->save();
+        return redirect()->route('book.index');
+
     }
 
     /**
